@@ -1,4 +1,4 @@
-package xyz.brckts.portablestonecutter.compat.jei;
+package xyz.brckts.portablestonecutter.client.compat.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;

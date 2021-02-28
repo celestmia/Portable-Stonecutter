@@ -1,6 +1,6 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package xyz.brckts.portablestonecutter.compat.jei;
+package xyz.brckts.portablestonecutter.client.compat.jei;
 
 import mcp.MethodsReturnNonnullByDefault;
 
