@@ -30,23 +30,20 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
 
     public static final ResourceLocation UID = new ResourceLocation(PortableStonecutter.MOD_ID, "anvil_flattening");
     private static final ResourceLocation texture = new ResourceLocation(PortableStonecutter.MOD_ID, "textures/gui/jei_anvil_flattening.png");
+    private static final ResourceLocation animation = new ResourceLocation(PortableStonecutter.MOD_ID, "textures/gui/animations/throw.png");
 
     private final IDrawableStatic background;
     private final IDrawable icon;
     private final String title;
-    private final IDrawable overlay;
-    private final IGuiHelper guiHelper;
-    private final ITickTimer tickTimer;
-    private AnimatedThrow animatedThrow;
+    private final IDrawableStatic overlay;
+    private final AnimatedThrow animatedThrow;
 
     public AnvilFlatteningRecipeCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.createBlankDrawable(128, 128);
+        this.background = guiHelper.createBlankDrawable(255, 255);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(Blocks.ANVIL));
         this.title = I18n.format("jei." + UID.toString());
-        this.guiHelper = guiHelper;
-        this.tickTimer = guiHelper.createTickTimer(20, 32, false);
-        this.overlay = guiHelper.createDrawable(texture, 0, 0, 16, 16);
-        this.animatedThrow = new AnimatedThrow(this.tickTimer);
+        this.overlay = guiHelper.createDrawable(texture, 0, 0, 128, 128);
+        this.animatedThrow = new AnimatedThrow(guiHelper.createDrawable(animation, 0, 0, 256, 256), guiHelper.createTickTimer(100, 15, false), 16);
     }
 
     @Nonnull
@@ -106,6 +103,11 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
 
     @Override
     public void draw(IAnvilFlatteningRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-
+        RenderSystem.enableAlphaTest();
+        RenderSystem.enableBlend();
+        overlay.draw(matrixStack);
+        animatedThrow.draw(matrixStack, 16, 16);
+        RenderSystem.disableBlend();
+        RenderSystem.disableAlphaTest();
     }
 }
