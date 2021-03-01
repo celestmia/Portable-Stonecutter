@@ -17,7 +17,7 @@ import xyz.brckts.portablestonecutter.items.crafting.ModRecipeTypes;
 import xyz.brckts.portablestonecutter.util.RegistryHandler;
 
 @JeiPlugin
-public class JEIAddon implements IModPlugin {
+public class JEIPSCPlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {
         return new ResourceLocation(PortableStonecutter.MOD_ID, "jei");

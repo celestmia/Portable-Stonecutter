@@ -4,7 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -13,13 +12,11 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import xyz.brckts.portablestonecutter.PortableStonecutter;
 import xyz.brckts.portablestonecutter.api.IAnvilFlatteningRecipe;
-import xyz.brckts.portablestonecutter.client.compat.jei.animations.AnimatedThrow;
-import xyz.brckts.portablestonecutter.util.RegistryHandler;
+import xyz.brckts.portablestonecutter.client.compat.jei.animations.AnimatedSprite;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -36,7 +33,7 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
     private final IDrawable icon;
     private final String title;
     private final IDrawableStatic overlay;
-    private final AnimatedThrow animatedThrow;
+    private final AnimatedSprite animatedSprite;
     private final int RECIPE_WIDTH = 128;
     private final int RECIPE_HEIGHT = 64;
 
@@ -45,7 +42,7 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(Blocks.ANVIL));
         this.title = I18n.format("jei." + UID.toString());
         this.overlay = guiHelper.createDrawable(texture, 0, 0, 128, 128);
-        this.animatedThrow = new AnimatedThrow(guiHelper.createDrawable(animation, 0, 0, 256, 256), guiHelper.createTickTimer(100, 15, false), 16);
+        this.animatedSprite = new AnimatedSprite(guiHelper.createDrawable(animation, 0, 0, 256, 256), guiHelper.createTickTimer(100, 15, false));
     }
 
     @Nonnull
@@ -107,7 +104,7 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
         RenderSystem.enableAlphaTest();
         RenderSystem.enableBlend();
         overlay.draw(matrixStack);
-        animatedThrow.draw(matrixStack, 0, 0);
+        animatedSprite.draw(matrixStack, 0, 0);
         RenderSystem.disableBlend();
         RenderSystem.disableAlphaTest();
     }
