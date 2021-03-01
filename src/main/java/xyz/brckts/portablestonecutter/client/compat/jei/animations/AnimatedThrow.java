@@ -37,6 +37,6 @@ public class AnimatedThrow implements IDrawable {
         int maskTop = (currentFrame / 4) * 64;
         int maskBottom = (3 - currentFrame / 4) * 64;
 
-        drawable.draw(matrixStack, xOffset, yOffset, maskTop, maskBottom, maskLeft, maskRight);
+        drawable.draw(matrixStack, xOffset - maskLeft, yOffset - maskTop, maskTop, maskBottom, maskLeft, maskRight);
     }
 }

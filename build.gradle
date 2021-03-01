@@ -79,7 +79,7 @@ minecraft {
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-            // Recommended logging level for the console
+            // Recommended logging level for the consoleq
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
@@ -125,7 +125,7 @@ dependencies {
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
 
-    // Real examples
+    // Real  examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
 

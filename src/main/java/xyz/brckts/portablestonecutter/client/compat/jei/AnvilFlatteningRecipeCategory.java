@@ -37,9 +37,11 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
     private final String title;
     private final IDrawableStatic overlay;
     private final AnimatedThrow animatedThrow;
+    private final int RECIPE_WIDTH = 128;
+    private final int RECIPE_HEIGHT = 64;
 
     public AnvilFlatteningRecipeCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.createBlankDrawable(255, 255);
+        this.background = guiHelper.createBlankDrawable(RECIPE_WIDTH, RECIPE_HEIGHT);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(Blocks.ANVIL));
         this.title = I18n.format("jei." + UID.toString());
         this.overlay = guiHelper.createDrawable(texture, 0, 0, 128, 128);
@@ -86,16 +88,15 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, IAnvilFlatteningRecipe recipe, IIngredients ingredients) {
-        int width = 80;
-        int index = 1;
+        int lines = 8;
+        int width = RECIPE_WIDTH / 2;
+        int index = 0;
         int ingrCnt = ingredients.getInputs(VanillaTypes.ITEM).size();
-        int spaceBetweenEach = width / ingrCnt;
-        int offset = 35 - ((ingrCnt-1) * spaceBetweenEach)/2;
-        recipeLayout.getItemStacks().init(0, true, 35, 0); // anvil
-        recipeLayout.getItemStacks().set(0, new ItemStack(Blocks.ANVIL));
+        int ingrPerLine = (ingrCnt > lines ? ingrCnt / lines : ingrCnt);
+        int spaceBetweenEach = width / ingrPerLine;
 
         for (List<ItemStack> o : ingredients.getInputs(VanillaTypes.ITEM)) {
-            recipeLayout.getItemStacks().init(index, true, offset + spaceBetweenEach * (index - 1), 45);
+            recipeLayout.getItemStacks().init(index, true, width + (index % ingrPerLine) * spaceBetweenEach, (index / ingrPerLine) * (RECIPE_HEIGHT / lines));
             recipeLayout.getItemStacks().set(index, o);
             index++;
         }
@@ -106,7 +107,7 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
         RenderSystem.enableAlphaTest();
         RenderSystem.enableBlend();
         overlay.draw(matrixStack);
-        animatedThrow.draw(matrixStack, 16, 16);
+        animatedThrow.draw(matrixStack, 0, 0);
         RenderSystem.disableBlend();
         RenderSystem.disableAlphaTest();
     }
