@@ -18,6 +18,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import xyz.brckts.portablestonecutter.PortableStonecutter;
 import xyz.brckts.portablestonecutter.api.IAnvilFlatteningRecipe;
+import xyz.brckts.portablestonecutter.client.compat.jei.animations.AnimatedThrow;
 import xyz.brckts.portablestonecutter.util.RegistryHandler;
 
 import javax.annotation.Nonnull;
@@ -36,14 +37,16 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
     private final IDrawable overlay;
     private final IGuiHelper guiHelper;
     private final ITickTimer tickTimer;
+    private AnimatedThrow animatedThrow;
 
     public AnvilFlatteningRecipeCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createBlankDrawable(128, 128);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(Blocks.ANVIL));
         this.title = I18n.format("jei." + UID.toString());
         this.guiHelper = guiHelper;
-        this.tickTimer = guiHelper.createTickTimer(20, 10, false);
+        this.tickTimer = guiHelper.createTickTimer(20, 32, false);
         this.overlay = guiHelper.createDrawable(texture, 0, 0, 16, 16);
+        this.animatedThrow = new AnimatedThrow(this.tickTimer);
     }
 
     @Nonnull
@@ -103,6 +106,6 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
 
     @Override
     public void draw(IAnvilFlatteningRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-        overlay.draw(matrixStack, 32, 32);
+
     }
 }
