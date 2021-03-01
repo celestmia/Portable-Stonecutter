@@ -41,7 +41,7 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
         this.background = guiHelper.createBlankDrawable(RECIPE_WIDTH, RECIPE_HEIGHT);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(Blocks.ANVIL));
         this.title = I18n.format("jei." + UID.toString());
-        this.overlay = guiHelper.createDrawable(texture, 0, 0, 128, 128);
+        this.overlay = guiHelper.createDrawable(texture, 0, 0, 128, 64);
         this.animatedSprite = new AnimatedSprite(guiHelper.createDrawable(animation, 0, 0, 256, 256), guiHelper.createTickTimer(100, 15, false));
     }
 
@@ -85,7 +85,7 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, IAnvilFlatteningRecipe recipe, IIngredients ingredients) {
-        int lines = 8;
+        int lines = RECIPE_HEIGHT / 16;
         int width = RECIPE_WIDTH / 2;
         int index = 0;
         int ingrCnt = ingredients.getInputs(VanillaTypes.ITEM).size();
@@ -93,7 +93,7 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
         int spaceBetweenEach = width / ingrPerLine;
 
         for (List<ItemStack> o : ingredients.getInputs(VanillaTypes.ITEM)) {
-            recipeLayout.getItemStacks().init(index, true, width + (index % ingrPerLine) * spaceBetweenEach, (index / ingrPerLine) * (RECIPE_HEIGHT / lines));
+            recipeLayout.getItemStacks().init(index, true, width + (index % ingrPerLine) * spaceBetweenEach, (index / ingrPerLine) * 16);
             recipeLayout.getItemStacks().set(index, o);
             index++;
         }
