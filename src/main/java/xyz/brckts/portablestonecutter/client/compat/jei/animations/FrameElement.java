@@ -18,7 +18,6 @@ public class FrameElement {
     public int getxOffset() {
         return xOffset;
     }
-
     public int getyOffset() {
         return yOffset;
     }

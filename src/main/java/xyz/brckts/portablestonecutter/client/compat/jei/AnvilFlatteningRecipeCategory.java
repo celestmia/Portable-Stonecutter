@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -17,6 +18,10 @@ import net.minecraft.util.ResourceLocation;
 import xyz.brckts.portablestonecutter.PortableStonecutter;
 import xyz.brckts.portablestonecutter.api.IAnvilFlatteningRecipe;
 import xyz.brckts.portablestonecutter.client.compat.jei.animations.AnimatedSprite;
+import xyz.brckts.portablestonecutter.client.compat.jei.animations.CompoundAnimation;
+import xyz.brckts.portablestonecutter.client.compat.jei.animations.Frame;
+import xyz.brckts.portablestonecutter.client.compat.jei.animations.FrameElement;
+import xyz.brckts.portablestonecutter.util.RegistryHandler;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -28,6 +33,8 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
     public static final ResourceLocation UID = new ResourceLocation(PortableStonecutter.MOD_ID, "anvil_flattening");
     private static final ResourceLocation texture = new ResourceLocation(PortableStonecutter.MOD_ID, "textures/gui/jei_anvil_flattening.png");
     private static final ResourceLocation animation = new ResourceLocation(PortableStonecutter.MOD_ID, "textures/gui/animations/throw.png");
+    private static final ResourceLocation throwItemRL = new ResourceLocation(PortableStonecutter.MOD_ID, "textures/gui/animations/throw_item.png");
+    private static final ResourceLocation dropAnvilRL = new ResourceLocation(PortableStonecutter.MOD_ID, "textures/gui/animations/drop_anvil.png");
 
     private final IDrawableStatic background;
     private final IDrawable icon;
@@ -37,12 +44,36 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
     private final int RECIPE_WIDTH = 128;
     private final int RECIPE_HEIGHT = 64;
 
+    private CompoundAnimation compoundAnimation;
     public AnvilFlatteningRecipeCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createBlankDrawable(RECIPE_WIDTH, RECIPE_HEIGHT);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(Blocks.ANVIL));
         this.title = I18n.format("jei." + UID.toString());
         this.overlay = guiHelper.createDrawable(texture, 0, 0, 128, 64);
-        this.animatedSprite = new AnimatedSprite(guiHelper.createDrawable(animation, 0, 0, 256, 256), guiHelper.createTickTimer(100, 15, false));
+        this.animatedSprite = new AnimatedSprite(guiHelper.createDrawable(animation, 0, 0, 256, 256), guiHelper.createTickTimer(100, 15, false), 5);
+        ITickTimer tickTimer = guiHelper.createTickTimer(40, 4, false);
+        this.compoundAnimation = new CompoundAnimation(
+                tickTimer,
+                new AnimatedSprite(
+                        guiHelper.createDrawable(throwItemRL, 0, 0, 256, 256),
+                        tickTimer,
+                        tickTimer.getMaxValue()
+                ),
+                new Frame(
+                        new FrameElement(
+                                guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.PORTABLE_STONECUTTER.get())),
+                                20,
+                                20
+                        )
+                ),
+                new Frame(
+                        new FrameElement(
+                                guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.PORTABLE_STONECUTTER.get())),
+                                30,
+                                15
+                        )
+                )
+        );
     }
 
     @Nonnull
@@ -104,7 +135,7 @@ public class AnvilFlatteningRecipeCategory implements IRecipeCategory<IAnvilFlat
         RenderSystem.enableAlphaTest();
         RenderSystem.enableBlend();
         overlay.draw(matrixStack);
-        animatedSprite.draw(matrixStack, 0, 0);
+        compoundAnimation.draw(matrixStack, 0, 0);
         RenderSystem.disableBlend();
         RenderSystem.disableAlphaTest();
     }

@@ -30,6 +30,14 @@ public class AnimatedSprite implements IDrawable {
         this.frameHeight = 64;
     }
 
+    public AnimatedSprite(IDrawableStatic drawable, ITickTimer tickTimer, int frameCount) {
+        this.drawable = drawable;
+        this.tickTimer = tickTimer;
+        this.frameCount = frameCount;
+        this.frameWidth = 64;
+        this.frameHeight = 64;
+    }
+
     private void drawFrame(MatrixStack matrixStack, int xOffset, int yOffset, int frame) {
         int drawableWidth = drawable.getWidth();
         int drawableHeight = drawable.getHeight();
@@ -41,6 +49,10 @@ public class AnimatedSprite implements IDrawable {
         int maskBottom = (lines - frame / lines - 1) * frameHeight;
 
         drawable.draw(matrixStack, xOffset - maskLeft, yOffset - maskTop, maskTop, maskBottom, maskLeft, maskRight);
+    }
+
+    public int getFrameCount() {
+        return frameCount;
     }
 
     @Override
@@ -55,7 +67,7 @@ public class AnimatedSprite implements IDrawable {
 
     @Override
     public void draw(MatrixStack matrixStack, int xOffset, int yOffset) {
-        int currentFrame = tickTimer.getValue();
+        int currentFrame = tickTimer.getValue() % this.frameCount;
 
         drawFrame(matrixStack, xOffset, yOffset, currentFrame);
     }
